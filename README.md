@@ -9,7 +9,7 @@ httpd_socket_t *http_socket = httpd_socket_init(\
   4096 // buffer size\
 );
 
-// get socket value
+// get socket value \
 printf("Socket is %d\n", http_socket->socket);
 
 httpd_socket_free(http_socket); // release used memory
