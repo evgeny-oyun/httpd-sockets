@@ -3,7 +3,7 @@
 ```c
 #include "sockets.c"
 
-httpd_socket_t *app_socket = socket_init(
+socket_t *app_socket = socket_init(
   "localhost:1234", // or "/full/path/to/unix.socket"
   1024, // backlog size
   60, // read/write timeout
