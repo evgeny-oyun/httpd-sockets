@@ -1,9 +1,9 @@
 # Socket binding address wrapper
 ## Usage
 ```c
-#include "http_sockets.c"
+#include "sockets.c"
 
-httpd_socket_t *http_socket = httpd_socket_init(
+httpd_socket_t *app_socket = socket_init(
   "localhost:1234", // or "/full/path/to/unix.socket"
   1024, // backlog size
   60, // read/write timeout
@@ -11,7 +11,7 @@ httpd_socket_t *http_socket = httpd_socket_init(
 );
 
 // get socket value
-printf("Socket is %d\n", http_socket->socket);
+printf("Socket is %d\n", app_socket->socket);
 
-httpd_socket_free(http_socket); // release used memory
+socket_free(app_socket); // release used memory
 ```
