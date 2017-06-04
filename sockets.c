@@ -1,5 +1,5 @@
-#ifndef _HTTP_SOCKETS_C
-#define _HTTP_SOCKETS_C
+#ifndef _SOCKETS_C
+#define _SOCKETS_C
 
 #include "sockets.h"
 
@@ -8,13 +8,13 @@ extern "C" {
 #endif
 
 extern void
-httpd_socket_set_nonblock(int fd)
+socket_set_nonblock(int fd)
 {
   fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
 }
 
 extern int
-httpd_socket_unix(httpd_socket_t *st, const char *path)
+socket_unix(socket_t *st, const char *path)
 {
   int                 len, fd;
   struct sockaddr_un  local;
@@ -76,7 +76,7 @@ httpd_socket_unix(httpd_socket_t *st, const char *path)
 }
 
 extern int
-httpd_socket_tcp(httpd_socket_t *st, const char *l_host, const char *l_port)
+socket_tcp(socket_t *st, const char *l_host, const char *l_port)
 {
   /* local variables */
   int                 fd;
@@ -162,20 +162,20 @@ httpd_socket_tcp(httpd_socket_t *st, const char *l_host, const char *l_port)
   return fd;
 }
 
-extern httpd_socket_t*
-httpd_socket_init(const char *address, int backlog, int timeout, int buffer_size)
+extern socket_t*
+socket_init(const char *address, int backlog, int timeout, int buffer_size)
 {
   char              key[256], value[512];
   int               i = 0, l = 0, k = 0,
                     v = 0, f = 0, t = 0;
-  httpd_socket_t   *s = NULL;
+  socket_t   *s = NULL;
 
   if(address == NULL || (l = strlen(address)) <= 4)
   {
     return NULL;
   }
 
-  if((s = (httpd_socket_t*)calloc(1, sizeof(httpd_socket_t))) == NULL)
+  if((s = (socket_t*)calloc(1, sizeof(socket_t))) == NULL)
   {
     return NULL;
   }
@@ -227,12 +227,12 @@ httpd_socket_init(const char *address, int backlog, int timeout, int buffer_size
   if(f == 0 && v > 0)
   {
     // seems like a tcp socket
-    s->socket = httpd_socket_tcp(s, key, value);
+    s->socket = socket_tcp(s, key, value);
   }
   else
   {
     // seems like a unix socket
-    s->socket = httpd_socket_unix(s, key);
+    s->socket = socket_unix(s, key);
   }
 
   if(s->socket == -1)
@@ -244,7 +244,7 @@ httpd_socket_init(const char *address, int backlog, int timeout, int buffer_size
   return s;
 }
 
-extern void httpd_socket_free(httpd_socket_t *st)
+extern void socket_free(socket_t *st)
 {
   if(st == NULL)
   {
@@ -258,4 +258,4 @@ extern void httpd_socket_free(httpd_socket_t *st)
 }
 #endif
 
-#endif // _HTTP_SOCKETS_C
+#endif // _SOCKETS_C
